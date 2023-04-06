@@ -1,6 +1,4 @@
 url: https://www.cata.dev
-baseurl: ''
-title: Catalin Ciocov
 
 plugins:
   - jekyll-postcss
