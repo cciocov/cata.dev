@@ -11,6 +11,3 @@ exclude:
   - package.json
   - postcss.config.js
   - tailwind.config.js
-
-include:
-  - .well-known
