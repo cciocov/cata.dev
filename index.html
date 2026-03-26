@@ -1,4 +1,407 @@
----
+<!---
 layout: empty
----
+--->
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catalin Ciocov - AWS Infrastructure for Startups</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; color: #1a1a2e; background: #fafaf9; }
+    .mono { font-family: 'Space Mono', monospace; }
+
+    /* Animations */
+    .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* Buttons */
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 16px 32px;
+      background: #1a1a2e; color: #fff; font-size: 16px; font-weight: 700;
+      border: none; border-radius: 8px; cursor: pointer; text-decoration: none;
+      transition: all 0.25s ease; font-family: 'DM Sans', sans-serif;
+    }
+    .cta-btn:hover { background: #2d2d4e; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,26,46,0.18); }
+    .cta-btn-sm { padding: 10px 20px; font-size: 14px; }
+    .cta-btn-lg { font-size: 17px; padding: 18px 36px; }
+
+    .cta-btn-outline {
+      display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px;
+      background: transparent; color: #1a1a2e; font-size: 15px; font-weight: 600;
+      border: 2px solid #d4d4d4; border-radius: 8px; cursor: pointer;
+      text-decoration: none; transition: all 0.25s ease; font-family: 'DM Sans', sans-serif;
+    }
+    .cta-btn-outline:hover { border-color: #1a1a2e; background: #f5f5f0; }
+
+    /* Tag */
+    .tag {
+      display: inline-block; padding: 6px 14px; background: #e8f5e9; color: #2e7d32;
+      font-size: 13px; font-weight: 700; border-radius: 100px; letter-spacing: 0.5px;
+      text-transform: uppercase; font-family: 'Space Mono', monospace;
+    }
+
+    /* Layout */
+    .section { padding: 100px 24px; max-width: 900px; margin: 0 auto; }
+
+    /* Card */
+    .card {
+      background: #fff; border: 1px solid #e8e8e4; border-radius: 12px;
+      padding: 36px; transition: box-shadow 0.3s ease;
+    }
+    .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+
+    /* Nav */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 20px 24px; display: flex; justify-content: space-between;
+      align-items: center; max-width: 960px; margin: 0 auto;
+      transition: all 0.3s ease;
+    }
+    .nav.scrolled {
+      padding: 12px 24px;
+      background: rgba(250,250,249,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #e8e8e4;
+    }
+
+    /* Grids */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .comparison-grid { display: flex; gap: 16px; }
+    .problem-list { display: grid; gap: 16px; }
+
+    .problem-item {
+      display: flex; gap: 14px; align-items: flex-start; padding: 16px 20px;
+      background: #fff; border: 1px solid #eee; border-radius: 10px;
+    }
+    .problem-arrow { color: #ef4444; font-size: 20px; line-height: 1.4; flex-shrink: 0; }
+
+    .feature-card-header { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
+
+    .comparison-item { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+
+    .process-step { display: flex; gap: 28px; margin-bottom: 40px; align-items: flex-start; }
+    .process-number { font-size: 36px; font-weight: 700; color: #e0e0d8; line-height: 1; flex-shrink: 0; }
+
+    .stats-row { display: flex; gap: 24px; flex-wrap: wrap; }
+    .stat-number { font-size: 22px; font-weight: 700; color: #10b981; }
+    .stat-label { font-size: 13px; color: #777; margin-top: 4px; }
+
+    .btn-row { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* SVG icons inline */
+    .icon-check, .icon-x, .icon-arrow { flex-shrink: 0; }
+
+    @media (max-width: 700px) {
+      .section { padding: 64px 18px; }
+      .comparison-grid { flex-direction: column; }
+      .card { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="navbar">
+    <span class="mono" style="font-weight:700; font-size:15px; letter-spacing:-0.5px;">Catalin Ciocov</span>
+    <a href="https://calendly.com/catadev/intro" class="cta-btn cta-btn-sm">Book a Free Call</a>
+  </nav>
+
+  <!-- HERO -->
+  <section style="padding:160px 24px 100px; max-width:900px; margin:0 auto;">
+    <div id="hero" data-animate class="fade-up">
+      <span class="tag" style="margin-bottom:20px;">For funded startups on AWS</span>
+      <h1 style="font-size:clamp(36px,5.5vw,56px); font-weight:700; line-height:1.1; letter-spacing:-1.5px; margin-bottom:24px; max-width:700px;">
+        Stop fighting your<br/>AWS infrastructure.<br/>
+        <span style="color:#888;">Start shipping product.</span>
+      </h1>
+      <p style="font-size:19px; line-height:1.7; color:#555; max-width:560px; margin-bottom:40px;">
+        I build production-ready, fully codified AWS infrastructure for early-stage startups
+        in 1-3 weeks, not months. So your engineers can focus on what actually matters.
+      </p>
+      <div class="btn-row">
+        <a href="https://calendly.com/catadev/intro" class="cta-btn">
+          Book a Free 30-Min Call
+          <svg class="icon-arrow" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#how" class="cta-btn-outline">See How It Works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="section" style="padding-top:40px;">
+    <div id="problem" data-animate class="fade-up">
+      <p class="mono" style="font-size:13px; color:#999; margin-bottom:12px; text-transform:uppercase; letter-spacing:1px;">Sound familiar?</p>
+      <h2 style="font-size:32px; font-weight:700; margin-bottom:40px; letter-spacing:-0.5px;">
+        Your infra was "fine" at 2 people.<br/>
+        <span style="color:#999;">Now it's a liability.</span>
+      </h2>
+      <div class="problem-list">
+        <div class="problem-item">
+          <span class="problem-arrow">→</span>
+          <span style="font-size:16px; line-height:1.6; color:#444;">Your CTO set up AWS manually and it's now tribal knowledge nobody else understands</span>
+        </div>
+        <div class="problem-item">
+          <span class="problem-arrow">→</span>
+          <span style="font-size:16px; line-height:1.6; color:#444;">Deployments are stressful, manual, and occasionally break production</span>
+        </div>
+        <div class="problem-item">
+          <span class="problem-arrow">→</span>
+          <span style="font-size:16px; line-height:1.6; color:#444;">You have no real staging environment - you test in prod and pray</span>
+        </div>
+        <div class="problem-item">
+          <span class="problem-arrow">→</span>
+          <span style="font-size:16px; line-height:1.6; color:#444;">Your AWS bill keeps climbing but nobody knows why</span>
+        </div>
+        <div class="problem-item">
+          <span class="problem-arrow">→</span>
+          <span style="font-size:16px; line-height:1.6; color:#444;">An investor or enterprise client just asked about SOC2 and you panicked</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT YOU GET -->
+  <section class="section" id="how">
+    <div id="solution" data-animate class="fade-up">
+      <span class="tag" style="margin-bottom:16px;">What you get</span>
+      <h2 style="font-size:32px; font-weight:700; margin-bottom:16px; letter-spacing:-0.5px;">
+        A complete infrastructure foundation.<br/>Done in 1-3 weeks.
+      </h2>
+      <p style="font-size:17px; color:#666; margin-bottom:48px; max-width:560px; line-height:1.7;">
+        Everything your engineering team needs to deploy with confidence,
+        scale without surprises, and sleep at night.
+      </p>
+      <div class="features-grid">
+        <div class="card">
+          <div class="feature-card-header">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3 style="font-size:16px; font-weight:700;">Multi-Environment Setup</h3>
+          </div>
+          <p style="font-size:15px; line-height:1.65; color:#666;">Dev, staging, and production - properly isolated, consistently configured, managed as code.</p>
+        </div>
+        <div class="card">
+          <div class="feature-card-header">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3 style="font-size:16px; font-weight:700;">Networking & Security</h3>
+          </div>
+          <p style="font-size:15px; line-height:1.65; color:#666;">VPCs, subnets, security groups, and IAM policies that follow AWS best practices from day one.</p>
+        </div>
+        <div class="card">
+          <div class="feature-card-header">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3 style="font-size:16px; font-weight:700;">Container Orchestration</h3>
+          </div>
+          <p style="font-size:15px; line-height:1.65; color:#666;">ECS or EKS, configured for your workload. Auto-scaling, health checks, rolling deploys.</p>
+        </div>
+        <div class="card">
+          <div class="feature-card-header">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3 style="font-size:16px; font-weight:700;">Database & Caching</h3>
+          </div>
+          <p style="font-size:15px; line-height:1.65; color:#666;">RDS and ElastiCache with automated backups, encryption, and proper network isolation.</p>
+        </div>
+        <div class="card">
+          <div class="feature-card-header">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3 style="font-size:16px; font-weight:700;">CI/CD Pipeline</h3>
+          </div>
+          <p style="font-size:15px; line-height:1.65; color:#666;">Push to deploy via GitHub Actions. No manual steps, no SSH-ing into servers, no cowboy deploys.</p>
+        </div>
+        <div class="card">
+          <div class="feature-card-header">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3 style="font-size:16px; font-weight:700;">Docs & Handoff</h3>
+          </div>
+          <p style="font-size:15px; line-height:1.65; color:#666;">Clear documentation plus a recorded walkthrough so your team can maintain it without you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARISON -->
+  <section class="section">
+    <div id="compare" data-animate class="fade-up">
+      <h2 style="font-size:32px; font-weight:700; margin-bottom:48px; letter-spacing:-0.5px; text-align:center;">
+        Your alternatives - honestly.
+      </h2>
+      <div class="comparison-grid">
+        <div class="card" style="flex:1; border-color:#fecaca; background:#fffbfb;">
+          <h3 style="font-size:15px; font-weight:700; margin-bottom:20px; color:#b91c1c;">Hire a DevOps Engineer</h3>
+          <div class="comparison-item">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 5l8 8m0-8l-8 8" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/></svg>
+            <span style="font-size:14px; color:#666;">$8,000+/month salary</span>
+          </div>
+          <div class="comparison-item">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 5l8 8m0-8l-8 8" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/></svg>
+            <span style="font-size:14px; color:#666;">2-4 months to recruit</span>
+          </div>
+          <div class="comparison-item">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 5l8 8m0-8l-8 8" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/></svg>
+            <span style="font-size:14px; color:#666;">2-3 months to set up</span>
+          </div>
+          <div class="comparison-item">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 5l8 8m0-8l-8 8" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/></svg>
+            <span style="font-size:14px; color:#666;">Single point of failure</span>
+          </div>
+        </div>
+        <div class="card" style="flex:1; border-color:#fde68a; background:#fffef5;">
+          <h3 style="font-size:15px; font-weight:700; margin-bottom:20px; color:#92400e;">PaaS (Render, Railway)</h3>
+          <div class="comparison-item">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 5l8 8m0-8l-8 8" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/></svg>
+            <span style="font-size:14px; color:#666;">Vendor lock-in</span>
+          </div>
+          <div class="comparison-item">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 5l8 8m0-8l-8 8" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/></svg>
+            <span style="font-size:14px; color:#666;">Limited customization</span>
+          </div>
+          <div class="comparison-item">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 5l8 8m0-8l-8 8" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/></svg>
+            <span style="font-size:14px; color:#666;">Expensive at scale</span>
+          </div>
+          <div class="comparison-item">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 5l8 8m0-8l-8 8" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/></svg>
+            <span style="font-size:14px; color:#666;">No compliance story</span>
+          </div>
+        </div>
+        <div class="card" style="flex:1; border-color:#a7f3d0; background:#f0fdf4;">
+          <h3 style="font-size:15px; font-weight:700; margin-bottom:20px; color:#166534;">Work With Me</h3>
+          <div class="comparison-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span style="font-size:14px; color:#444;">Done in 1-3 weeks</span>
+          </div>
+          <div class="comparison-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span style="font-size:14px; color:#444;">Fraction of the cost</span>
+          </div>
+          <div class="comparison-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span style="font-size:14px; color:#444;">Battle-tested patterns</span>
+          </div>
+          <div class="comparison-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span style="font-size:14px; color:#444;">Your team owns it all</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section">
+    <div id="process" data-animate class="fade-up">
+      <span class="tag" style="margin-bottom:16px;">How it works</span>
+      <h2 style="font-size:32px; font-weight:700; margin-bottom:48px; letter-spacing:-0.5px;">
+        Three steps. No complexity.
+      </h2>
+      <div class="process-step">
+        <span class="mono process-number">01</span>
+        <div>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Discovery Call</h3>
+          <p style="font-size:16px; line-height:1.7; color:#555; max-width:520px;">30 minutes, free, no pitch. I learn about your stack, your pain points, and what you need. You get honest advice - even if the answer is "you don't need me yet."</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <span class="mono process-number">02</span>
+        <div>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Build & Deploy</h3>
+          <p style="font-size:16px; line-height:1.7; color:#555; max-width:520px;">I set up your entire infrastructure in 1-3 weeks using Terraform and Terragrunt. You get progress updates and can review everything in your own repo as I go.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <span class="mono process-number">03</span>
+        <div>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Handoff & Support</h3>
+          <p style="font-size:16px; line-height:1.7; color:#555; max-width:520px;">You get full documentation, a recorded walkthrough, and a team that can maintain everything independently. Optional ongoing support if you want a safety net.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section">
+    <div id="about" data-animate class="fade-up">
+      <div class="card" style="background:#1a1a2e; color:#fff; border:none; padding:48px 40px;">
+        <p class="mono" style="font-size:13px; color:#888; margin-bottom:16px; text-transform:uppercase; letter-spacing:1px;">Who's behind this</p>
+        <div style="display:flex; justify-content:start; align-items:center; margin-bottom:20px;">
+          <img style="border-radius:50%; width:80px;" src="/assets/img/avatar.jpg">
+          <h2 style="font-size:28px; font-weight:700; margin-left:20px; color:#fff;">Catalin Ciocov</h2>
+        </div>
+        <p style="font-size:16px; line-height:1.8; color:#aaa; max-width:600px; margin-bottom:16px;">
+          12+ years in software engineering. Full-stack background, which means I build
+          infrastructure that serves the application and its developers - not infra for infra's sake.
+        </p>
+        <p style="font-size:16px; line-height:1.8; color:#aaa; max-width:600px; margin-bottom:28px;">
+          I've spent years building and maintaining production AWS infrastructure with
+          Terraform and Terragrunt. I've seen what breaks at scale and what patterns survive.
+          Now I package that experience for startups who need it done right and fast.
+        </p>
+        <div class="stats-row">
+          <div>
+            <div class="mono stat-number">12+</div>
+            <div class="stat-label">Years Experience</div>
+          </div>
+          <div>
+            <div class="mono stat-number">AWS</div>
+            <div class="stat-label">Daily Since Day One</div>
+          </div>
+          <div>
+            <div class="mono stat-number">IaC</div>
+            <div class="stat-label">Terraform & Terragrunt</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="text-align:center; padding-bottom:120px;">
+    <div id="cta" data-animate class="fade-up">
+      <h2 style="font-size:clamp(28px,4vw,40px); font-weight:700; margin-bottom:16px; letter-spacing:-0.5px;">
+        Ready to fix your infrastructure?
+      </h2>
+      <p style="font-size:17px; color:#666; margin-bottom:36px; max-width:480px; margin-left:auto; margin-right:auto;">
+        Book a free 30-minute call. No pitch, no pressure - just an honest
+        conversation about what your startup needs.
+      </p>
+      <a href="https://calendly.com/catadev/intro" class="cta-btn cta-btn-lg">
+        Book Your Free Call
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="border-top:1px solid #e8e8e4; padding:32px 24px; text-align:center;">
+    <div style="display:flex; justify-content:center; gap:20px;">
+      <a href="https://www.linkedin.com/in/cciocov/" target="_blank" rel="noopener" style="color:#999; transition:color 0.2s;" onmouseover="this.style.color='#1a1a2e'" onmouseout="this.style.color='#999'" aria-label="LinkedIn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="https://x.com/cata_dev" target="_blank" rel="noopener" style="color:#999; transition:color 0.2s;" onmouseover="this.style.color='#1a1a2e'" onmouseout="this.style.color='#999'" aria-label="X (Twitter)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+    </div>
+  </footer>
+
+  <!-- Scroll animations + nav scroll effect -->
+  <script>
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
